@@ -62,9 +62,9 @@ class GreetingBotTest extends TestCase
      */
     public function itHandlesMultipleNamesBothNormalAndShouted()
     {
-        $answer = $this->getAnswerForMultipleNames(["Bart", "AMY", "Nicole"]);
+        $answer = $this->getAnswerForMultipleNames(["Bart", "Kate", "AMY", "Nicole", "TED"]);
 
-        $this->assertContains("Bart and Nicole. AND HELLO AMY!", $answer);
+        $this->assertContains("Bart, Kate, and Nicole. AND HELLO AMY AND TED!", $answer);
     }
 
     private function getAnswerForName(?string $name) : string

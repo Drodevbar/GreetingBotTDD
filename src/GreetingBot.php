@@ -30,54 +30,52 @@ class GreetingBot
 
     private function getResponseForMultipleNames() : string
     {
-        $shoutedName = $this->getShoutedNameIfGiven();
+        $shoutedResponse = $this->getFormattedShoutedResponse();
 
-        if ($shoutedName) {
-            $this->removeShoutedNameFromAllNames($shoutedName);
-        }
+        $response = "Hello, {$this->getFormattedNames($this->name)}.";
 
-        if (count($this->name) > 2) {
-            $response = $this->getResponseForMoreThanTwoNames();
-        } else {
-            $response = $this->getResponseForExactlyTwoNames();
-        }
-
-        return $shoutedName ? ($response . " AND {$this->getResponseForShoutedName($shoutedName)}") : $response;
+        return "{$response} AND {$shoutedResponse}";
     }
 
-    private function getShoutedNameIfGiven() : ?string
+    private function getFormattedShoutedResponse() : string
     {
-        foreach ($this->name as $name) {
+        $shoutedNames = $this->getShoutedNamesIfGiven();
+
+        return $shoutedNames ? ('HELLO ' . strtoupper($this->getFormattedNames($shoutedNames)) . '!') : "";
+    }
+
+    private function getShoutedNamesIfGiven() : ?array
+    {
+        $shoutedNames = [];
+
+        foreach ($this->name as $index => $name) {
             if (ctype_upper($name)) {
-                return $name;
+                unset($this->name[$index]);
+                $shoutedNames[] = $name;
             }
         }
-        return null;
+        return $shoutedNames ?? null;
     }
 
-    private function removeShoutedNameFromAllNames(string $shoutedName) : void
+    private function getFormattedNames(array $names) : string
     {
-        $shoutedNameIndex = array_search($shoutedName, $this->name);
-
-        unset($this->name[$shoutedNameIndex]);
-
-        $this->name = array_values($this->name);
+        if (count($names) > 2) {
+            return $this->formatMoreThanTwoNames($names);
+        }
+        return $this->formatExactlyTwoNames($names);
     }
 
-    private function getResponseForMoreThanTwoNames() : string
+    private function formatMoreThanTwoNames(array $names) : string
     {
-        $firstNames = array_slice($this->name, 0, count($this->name) - 1);
-        $lastName = end($this->name);
-        $names = implode(", ", $firstNames) . ", and {$lastName}";
+        $firstNames = array_slice($this->name, 0, count($names) - 1);
+        $lastName = end($names);
 
-        return "Hello, {$names}.";
+        return implode(", ", $firstNames) . ", and {$lastName}";
     }
 
-    private function getResponseForExactlyTwoNames() : string
+    private function formatExactlyTwoNames(array $names) : string
     {
-        $names = implode(" and ", $this->name);
-
-        return "Hello, {$names}.";
+        return implode(" and ", $names);
     }
 
     private function getResponseForSingleName() : string
