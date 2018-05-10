@@ -14,7 +14,7 @@ class GreetingBotTest extends TestCase
     {
         $answer = $this->getAnswerForName("Bart");
 
-        $this->assertContains("Bart", $answer);
+        $this->assertEquals("Hello, Bart.", $answer);
     }
 
     /**
@@ -24,7 +24,7 @@ class GreetingBotTest extends TestCase
     {
         $answer = $this->getAnswerForName(null);
 
-        $this->assertContains("my friend", $answer);
+        $this->assertEquals("Hello, my friend.", $answer);
     }
 
     /**
@@ -34,7 +34,7 @@ class GreetingBotTest extends TestCase
     {
         $answer = $this->getAnswerForName("BART");
 
-        $this->assertContains("HELLO BART!", $answer);
+        $this->assertEquals("HELLO BART!", $answer);
     }
 
     /**
@@ -44,7 +44,7 @@ class GreetingBotTest extends TestCase
     {
         $answer = $this->getAnswerForMultipleNames(["Bart", "Amy"]);
 
-        $this->assertContains("Bart and Amy", $answer);
+        $this->assertEquals("Hello, Bart and Amy.", $answer);
     }
 
     /**
@@ -54,7 +54,27 @@ class GreetingBotTest extends TestCase
     {
         $answer = $this->getAnswerForMultipleNames(["Bart", "Amy", "Nicole"]);
 
-        $this->assertContains("Bart, Amy, and Nicole", $answer);
+        $this->assertEquals("Hello, Bart, Amy, and Nicole.", $answer);
+    }
+
+    /**
+     * @test
+     */
+    public function inHandlesExactlyTwoShoutedNames()
+    {
+        $answer = $this->getAnswerForMultipleNames(["BART", "AMY"]);
+
+        $this->assertEquals("HELLO BART AND AMY!", $answer);
+    }
+
+    /**
+     * @test
+     */
+    public function inHandlesMoreThanTwoShoutedNames()
+    {
+        $answer = $this->getAnswerForMultipleNames(["BART", "AMY", "NICOLE"]);
+
+        $this->assertEquals("HELLO BART, AMY, AND NICOLE!", $answer);
     }
 
     /**
@@ -64,7 +84,7 @@ class GreetingBotTest extends TestCase
     {
         $answer = $this->getAnswerForMultipleNames(["Bart", "Kate", "AMY", "Nicole", "TED"]);
 
-        $this->assertContains("Bart, Kate, and Nicole. AND HELLO AMY AND TED!", $answer);
+        $this->assertEquals("Hello, Bart, Kate, and Nicole. AND HELLO AMY AND TED!", $answer);
     }
 
     private function getAnswerForName(?string $name) : string

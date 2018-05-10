@@ -32,16 +32,24 @@ class GreetingBot
     {
         $shoutedResponse = $this->getFormattedShoutedResponse();
 
-        $response = "Hello, {$this->getFormattedNames($this->name)}.";
+        $normalResponse = $this->getFormattedNormalResponse();
 
-        return "{$response} AND {$shoutedResponse}";
+        if ($normalResponse && $shoutedResponse) {
+            return "$normalResponse AND $shoutedResponse";
+        }
+        return $normalResponse . $shoutedResponse;
     }
 
-    private function getFormattedShoutedResponse() : string
+    private function getFormattedShoutedResponse() : ?string
     {
         $shoutedNames = $this->getShoutedNamesIfGiven();
 
-        return $shoutedNames ? ('HELLO ' . strtoupper($this->getFormattedNames($shoutedNames)) . '!') : "";
+        return $shoutedNames ? ('HELLO ' . strtoupper($this->getFormattedNames($shoutedNames)) . '!') : null;
+    }
+
+    private function getFormattedNormalResponse() : ?string
+    {
+        return ($this->name) ? "Hello, {$this->getFormattedNames($this->name)}." : null;
     }
 
     private function getShoutedNamesIfGiven() : ?array
@@ -57,8 +65,11 @@ class GreetingBot
         return $shoutedNames ?? null;
     }
 
-    private function getFormattedNames(array $names) : string
+    private function getFormattedNames(array $names) : ?string
     {
+        if (empty($names)) {
+            return null;
+        }
         if (count($names) > 2) {
             return $this->formatMoreThanTwoNames($names);
         }
@@ -67,7 +78,7 @@ class GreetingBot
 
     private function formatMoreThanTwoNames(array $names) : string
     {
-        $firstNames = array_slice($this->name, 0, count($names) - 1);
+        $firstNames = array_slice($names, 0, count($names) - 1);
         $lastName = end($names);
 
         return implode(", ", $firstNames) . ", and {$lastName}";
