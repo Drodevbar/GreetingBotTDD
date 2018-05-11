@@ -32,7 +32,7 @@ class GreetingBot
 
     private function getResponseForMultipleNames() : string
     {
-        $this->name = $this->getExtractedNamesIfGiven();
+        $this->name = $this->extractNestedNames();
 
         $shoutedResponse = $this->getFormattedShoutedResponse();
 
@@ -44,7 +44,7 @@ class GreetingBot
         return $normalResponse . $shoutedResponse;
     }
 
-    private function getExtractedNamesIfGiven() : array
+    private function extractNestedNames() : array
     {
         $extractor = new NestedExtractor($this->name);
 

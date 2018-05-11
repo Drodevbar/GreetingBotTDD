@@ -9,26 +9,32 @@ class NestedExtractor
      */
     private $nestedData;
 
+    /**
+     * @var array
+     */
+    private $extractedElementsBuffer;
+
     public function __construct(array $nestedData)
     {
         $this->nestedData = $nestedData;
+        $this->extractedElementsBuffer = [];
     }
 
     public function extract() : array
     {
-        foreach ($this->nestedData as $index => &$cell) {
+        foreach ($this->nestedData as $index => $cell) {
             if ($this->isIntentionallyNested($cell)) {
                 $this->removeQuotes($index);
                 continue;
             }
 
-            $potentiallyNested = $this->getElementsWithoutWhitespaces($cell);
+            $explodedElements = $this->getElementsWithoutWhitespaces($cell);
 
-            if (count($potentiallyNested) > 1) {
-                $this->putElementsInSpecifiedIndex($potentiallyNested, $index);
+            if (count($explodedElements) > 1) {
+                $this->extractedElementsBuffer[$index] = $explodedElements;
             }
         }
-        return $this->nestedData;
+        return $this->getExtractedData();
     }
 
     private function getElementsWithoutWhitespaces(string $elements) : array
@@ -46,8 +52,11 @@ class NestedExtractor
         $this->nestedData[$index] = str_replace("\"", "", $this->nestedData[$index]);
     }
 
-    private function putElementsInSpecifiedIndex(array $elements, int $index) : void
+    private function getExtractedData() : array
     {
-        array_splice($this->nestedData, $index, 1, $elements);
+        foreach ($this->extractedElementsBuffer as $index => $data) {
+            array_splice($this->nestedData, $index, 1, $data);
+        }
+        return $this->nestedData;
     }
 }
