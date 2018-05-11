@@ -17,7 +17,7 @@ class NestedExtractor
     public function extract() : array
     {
         foreach ($this->nestedData as $index => &$cell) {
-            if ($this->checkIfIntentionallyNested($cell)) {
+            if ($this->isIntentionallyNested($cell)) {
                 $this->removeQuotes($index);
                 continue;
             }
@@ -36,7 +36,7 @@ class NestedExtractor
         return array_map('trim', explode(',', $elements));
     }
 
-    private function checkIfIntentionallyNested(string $elements) : bool
+    private function isIntentionallyNested(string $elements) : bool
     {
         return preg_match("/\".+\"/", $elements);
     }
