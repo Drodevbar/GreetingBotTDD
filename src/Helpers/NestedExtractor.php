@@ -54,9 +54,16 @@ class NestedExtractor
 
     private function getExtractedData() : array
     {
-        foreach ($this->extractedElementsBuffer as $index => $data) {
-            array_splice($this->nestedData, $index, 1, $data);
+        $extractedData = [];
+
+        foreach ($this->nestedData as $index => $cell) {
+            if (isset($this->extractedElementsBuffer[$index])) {
+                $extractedData = array_merge($extractedData, $this->extractedElementsBuffer[$index]);
+            } else {
+                $extractedData[] = $cell;
+            }
         }
-        return $this->nestedData;
+
+        return $extractedData;
     }
 }
