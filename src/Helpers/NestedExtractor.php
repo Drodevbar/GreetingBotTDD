@@ -48,6 +48,6 @@ class NestedExtractor
 
     private function putElementsInSpecifiedIndex(array $elements, int $index) : void
     {
-        array_splice($this->nestedData, $index, count($elements), $elements);
+        array_splice($this->nestedData, $index, 1, $elements);
     }
 }
