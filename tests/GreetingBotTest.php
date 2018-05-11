@@ -87,6 +87,26 @@ class GreetingBotTest extends TestCase
         $this->assertEquals("Hello, Bart, Kate, and Nicole. AND HELLO AMY AND TED!", $answer);
     }
 
+    /**
+     * @test
+     */
+    public function itHandlesNestedNames()
+    {
+        $answer = $this->getAnswerForMultipleNames(["Bart", "Kate, Amy"]);
+
+        $this->assertEquals("Hello, Bart, Kate, and Amy.", $answer);
+    }
+
+    /**
+     * @test
+     */
+    public function itHandlesIntentionallyNestedNames()
+    {
+        $answer = $this->getAnswerForMultipleNames(["Bart", "\"Kate, Amy\""]);
+
+        $this->assertEquals("Hello, Bart and Kate, Amy.", $answer);
+    }
+
     private function getAnswerForName(?string $name) : string
     {
         $bot = new GreetingBot();

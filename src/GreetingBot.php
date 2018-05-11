@@ -2,6 +2,8 @@
 
 namespace Kata;
 
+use Kata\Helpers\NestedExtractor;
+
 class GreetingBot
 {
     /**
@@ -30,6 +32,8 @@ class GreetingBot
 
     private function getResponseForMultipleNames() : string
     {
+        $this->name = $this->getExtractedNamesIfGiven();
+
         $shoutedResponse = $this->getFormattedShoutedResponse();
 
         $normalResponse = $this->getFormattedNormalResponse();
@@ -38,6 +42,13 @@ class GreetingBot
             return "$normalResponse AND $shoutedResponse";
         }
         return $normalResponse . $shoutedResponse;
+    }
+
+    private function getExtractedNamesIfGiven() : array
+    {
+        $extractor = new NestedExtractor($this->name);
+
+        return $extractor->extract();
     }
 
     private function getFormattedShoutedResponse() : ?string
