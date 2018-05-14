@@ -63,7 +63,6 @@ class NestedExtractor
                 $extractedData[] = $cell;
             }
         }
-
         return $extractedData;
     }
 }

@@ -32,7 +32,7 @@ class GreetingBot
 
     private function getResponseForMultipleNames() : string
     {
-        $this->name = $this->extractNestedNames();
+        $this->extractNestedNames();
 
         $shoutedResponse = $this->getFormattedShoutedResponse();
 
@@ -44,11 +44,11 @@ class GreetingBot
         return $normalResponse . $shoutedResponse;
     }
 
-    private function extractNestedNames() : array
+    private function extractNestedNames() : void
     {
         $extractor = new NestedExtractor($this->name);
 
-        return $extractor->extract();
+        $this->name = $extractor->extract();
     }
 
     private function getFormattedShoutedResponse() : ?string
@@ -68,7 +68,7 @@ class GreetingBot
         $shoutedNames = [];
 
         foreach ($this->name as $index => $name) {
-            if (ctype_upper($name)) {
+            if ($this->isUppercase($name)) {
                 unset($this->name[$index]);
                 $shoutedNames[] = $name;
             }
@@ -110,7 +110,7 @@ class GreetingBot
 
     private function getResponseForGivenName() : string
     {
-        if (ctype_upper($this->name)) {
+        if ($this->isUppercase($this->name)) {
             return $this->getResponseForShoutedName($this->name);
         }
         return "Hello, {$this->name}.";
@@ -124,5 +124,12 @@ class GreetingBot
     private function getResponseForNullName() : string
     {
         return "Hello, my friend.";
+    }
+
+    private function isUppercase(string $name) : bool
+    {
+        $nameWithoutCommas =  str_replace(", ", "", $name);
+
+        return ctype_upper($nameWithoutCommas);
     }
 }
