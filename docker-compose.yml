@@ -4,7 +4,6 @@ services:
   app:
     build: .
     image: php72_cli
-    container_name: php72_cli_app
     volumes:
       - .:/var/www
       - composer-cache:/root/.composer/cache
