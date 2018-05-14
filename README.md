@@ -1,6 +1,9 @@
-### Źródło: https://github.com/testdouble/contributing-tests/wiki/Greeting-Kata
+### Source: https://github.com/testdouble/contributing-tests/wiki/Greeting-Kata
 
-Odpalanie testów: `docker-compose up`
+Running tests:
+```
+docker-compose up
+```
 
 #### Greeting Kata
 
