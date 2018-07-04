@@ -1,6 +1,6 @@
 ### Source: https://github.com/testdouble/contributing-tests/wiki/Greeting-Kata
 
-Running tests:
+Running tests and CodeSniffer in Docker container:
 ```
 docker-compose up
 ```
